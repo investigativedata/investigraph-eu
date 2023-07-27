@@ -1,0 +1,51 @@
+name: eu_authorities
+title: EU authorities as collected by AsktheEU.org
+prefix: eu-authorities
+country: eu
+summary: |
+  A spreadsheet file listing every body in AsktheEU.org is available
+resources:
+  - name: entities.ftm.json
+    url: https://data.ftm.store/eu_authorities/entities.ftm.json
+    mime_type: application/json+ftm
+publisher:
+  name: AsktheEU
+  description: |
+    The AsktheEU.org website enables you get the information you want about the
+    European Union. It is as easy as asking a question. The website is run by
+    two not-for-profit, non-governmental organisations, Access Info Europe and
+    mySociety. It is not an official EU website.
+  url: https://www.asktheeu.org/
+
+extract:
+  sources:
+    - uri: https://www.asktheeu.org/en/body/all-authorities.csv
+
+transform:
+  queries:
+    - entities:
+        body:
+          schema: PublicBody
+          key: URL name
+          properties:
+            name:
+              column: "Name"
+            weakAlias:
+              column: "Short name"
+            keywords:
+              column: "Tags"
+              split: " "
+            legalForm:
+              column: "Tags"
+              split: " "
+            website:
+              column: "Home page"
+            description:
+              column: "Notes"
+            sourceUrl:
+              template: "https://www.asktheeu.org/en/body{{URL name}}"
+
+load:
+  index_uri: s3://s3.investigativedata.org@data.ftm.store/eu_authorities/index.json
+  entities_uri: s3://s3.investigativedata.org@data.ftm.store/eu_authorities/entities.ftm.json
+

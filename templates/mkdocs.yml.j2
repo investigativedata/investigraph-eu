@@ -1,0 +1,48 @@
+site_name: investigraph.eu 🇪🇺
+site_url: https://investigativedata.github.io/investigraph-eu
+repo_url: https://github.com/investigativedata/investigraph-eu
+nav:
+  - Start: index.md
+  - Datasets:
+    {% for dataset in datasets %}
+    - datasets/{{ dataset.name }}.md
+    {% endfor %}
+  - Get involved:
+    - contribute.md
+    - development.md
+  - About:
+    - about.md
+theme:
+  name: material
+  custom_dir: overrides
+  font:
+    text: Quicksand
+    code: Inconsolata
+  logo: img/logo.png
+  favicon: img/favicon.ico
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    # - navigation.footer
+    - toc.follow
+    - content.code.copy
+extra_css:
+  - stylesheets/extra.css
+extra:
+  social:
+    - icon: material/web
+      link: https://investigraph.dev
+    - icon: material/mail
+      link: mailto:hi@investigativedata.org
+    - icon: material/github
+      link: https://github.com/investigraph-eu
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+copyright: © 2023 IDIO Daten Import Export UG (haftungsbeschränkt)

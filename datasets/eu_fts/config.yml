@@ -1,0 +1,71 @@
+name: eu_fts
+title: EU Financial Transparency System
+country: eu
+
+summary: |
+  Beneficiaries of funding from the EU budget implemented directly by the
+  Commission (at Headquarters or in EU delegations to non-EU countries) and
+  other EU bodies such as executive agencies ('direct management') or
+  implemented indirectly by other international organisations or non-EU
+  countries ('indirect management'), and beneficiaries of the European
+  Development Fund.
+
+publisher:
+  name: European Commission
+  url: http://ec.europa.eu/budget/fts/index_en.htm
+
+resources:
+  - name: entities.ftm.json
+    url: https://data.ftm.store/eu_fts/entities.ftm.json
+    mime_type: application/json+ftm
+
+extract:
+  sources:
+    - uri: ./src/2022.xlsx
+    - uri: ./src/2021.xlsx
+    - uri: ./src/2020.xlsx
+    - uri: ./src/2019.xlsx
+    - uri: ./src/2018.xlsx
+    - uri: ./src/2017.xlsx
+    - uri: ./src/2016.xlsx
+    - uri: ./src/2015.xlsx
+    - uri: ./src/2014.xlsx
+    - uri: ./src/2013_FTS_data_en.xlsx
+    - uri: ./src/2012_FTS_dataset_en.xlsx
+    - uri: ./src/2011_FTS_dataset_en.xlsx
+    - uri: ./src/2010_FTS_dataset_en.xlsx
+    - uri: ./src/2009_FTS_dataset_en.xlsx
+    - uri: ./src/2008_FTS_dataset_en.xlsx
+    - uri: ./src/2007_FTS_data_en.xlsx
+  pandas:
+    read:
+      options:
+        dtype: str
+    operations:
+      - handler: DataFrame.fillna
+        options:
+          value: ""
+      - handler: DataFrame.rename
+        options:
+          columns:
+            "Year": date
+            "Reference (Budget)": payment_recordId
+            "Name of beneficiary": beneficiary_name
+            "VAT number of beneficiary": beneficiary_vatCode
+            "Coordinator": beneficiary_role
+            "Address": beneficiary_street
+            "City": beneficiary_city
+            "Postal code": beneficiary_postcode
+            "Beneficiary country": beneficiary_country
+            "Beneficiary’s contracted amount (EUR)": payment_amount
+            "Subject of grant or contract": project_identifier
+            "Budget line name": project_name
+            "Programme name": program
+            "Beneficiary type": beneficiary_type
+            "Project start date": project_startDate
+            "Project end date": project_endDate
+            "Responsible department": payer
+
+transform:
+  handler: ./transform.py:handle
+

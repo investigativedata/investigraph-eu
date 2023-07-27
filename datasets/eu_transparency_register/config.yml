@@ -1,0 +1,45 @@
+name: eu_transparency_register
+title: EU Transparency Register
+prefix: eu-tr
+country: eu
+summary: |
+  The Transparency Register is a public database listing interest
+  representatives (organisations, formal or informal groups, associations or
+  networks, self-employed individuals) that carry out activities to influence
+  the EU law or policy-making or the decision-making processes of the EU
+  institutions. It is designed to show what interests are being represented at
+  EU level, by whom and on whose behalf – and the resources devoted to such
+  interest representation activities (including financial support and
+  sponsorship).
+resources:
+  - name: entities.ftm.json
+    url: https://data.ftm.store/eu_transparency_register/entities.ftm.json
+    mime_type: application/json+ftm
+publisher:
+  name: European Commission Secretariat-General
+  description: |
+    The Secretariat-General is responsible for the overall coherence of the
+    Commission’s work – both in shaping new policies, and in steering them
+    through the other EU institutions. It supports the whole Commission.
+  url: https://commission.europa.eu/about-european-commission/departments-and-executive-agencies/secretariat-general_en
+
+extract:
+  sources:
+    - name: organizations
+      uri: https://ec.europa.eu/transparencyregister/public/consultation/statistics.do?action=getLobbyistsExcel&fileType=XLS_NEW
+      pandas:
+        operations:
+          - handler: DataFrame.fillna
+            options:
+              value: ""
+    - name: persons
+      uri: https://ec.europa.eu/transparencyregister/public/consultation/statistics.do?action=getLobbyistsXml&fileType=ACCREDITED_PERSONS
+      pandas:
+        read:
+          options:
+            xpath: .//pd:accreditedPerson
+            namespaces:
+              pd: http://ec.europa.eu/transparencyregister/accreditedPerson/V1
+
+transform:
+  handler: ./transform.py:handle

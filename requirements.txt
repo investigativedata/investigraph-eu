@@ -1,0 +1,3 @@
+investigraph
+mkdocs-material
+jinja-cli

@@ -1,0 +1,44 @@
+name: ec_meetings
+title: European Commission - Meetings with interest representatives
+prefix: ec
+country: eu
+summary: |
+  The Commission applies strict rules on transparency concerning its contacts
+  and relations with interest representatives: it requires all its Members, their
+  closest advisors (members of Cabinet) and all Directors-General to meet only
+  interest representatives that are registered in the Transparency Register and
+  to publish information on such meetings. Those measures fall within the
+  meaning and scope of the conditionality and complementary transparency
+  measures provided for in the Interinstitutional Agreement establishing the
+  mandatory Transparency Register.
+resources:
+  - name: entities.ftm.json
+    url: https://data.ftm.store/ec_meetings/entities.ftm.json
+    mime_type: application/json+ftm
+publisher:
+  name: European Commission Secretariat-General
+  description: |
+    The Secretariat-General is responsible for the overall coherence of the
+    Commission’s work – both in shaping new policies, and in steering them
+    through the other EU institutions. It supports the whole Commission.
+  url: https://commission.europa.eu/about-european-commission/departments-and-executive-agencies/secretariat-general_en
+
+extract:
+  pandas:
+    read:
+      options:
+        skiprows: 1
+    operations:
+      - handler: DataFrame.fillna
+        options:
+          value: ""
+  sources:
+    - name: ec_juncker
+      uri: https://ec.europa.eu/transparencyinitiative/meetings/dataxlsx.do?name=meetingscommissionrepresentatives1419
+    - name: ec_leyen
+      uri: https://ec.europa.eu/transparencyinitiative/meetings/dataxlsx.do?name=meetingscommissionrepresentatives1924
+    - name: dc_meetings
+      uri: https://ec.europa.eu/transparencyinitiative/meetings/dataxlsx.do?name=meetingsdirectorgenerals
+
+transform:
+  handler: ./transform.py:handle

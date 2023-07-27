@@ -1,3 +1,10 @@
+.prefect
+data
+catalog.json
+docs/datasets
+docs/index.md
+mkdocs.yml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

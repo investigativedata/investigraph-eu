@@ -1,0 +1,5 @@
+datasets:
+  - include: https://data.ftm.store/eu_transparency_register/index.json
+  - include: https://data.ftm.store/ec_meetings/index.json
+  - include: https://data.ftm.store/eu_fts/index.json
+  - include: https://data.ftm.store/eu_authorities/index.json
