@@ -34,7 +34,8 @@ Set your aleph host and api key via environment variables, or specify via `--hos
 
     export ALEPHCLIENT_HOST=https://youraleph.org
     export ALEPHCLIENT_API_KEY=xxxx
-
-    curl -s https://data.ftm.store/{{ name }}/entities.ftm.json | alephclient write-entities -f {{ name }}
+    {% for resource in resources %}{% if resource.name == "entities.ftm.json" %}
+    curl -s {{ resource.url }} | alephclient write-entities -f {{ name }}{% endif %}
+    {% endfor %}
 
 Read more: [alephclient documentation](https://docs.aleph.occrp.org/developers/alephclient/)

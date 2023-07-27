@@ -5,7 +5,7 @@ TMPL_DIR := templates
 REMOTE_DATA := https://data.ftm.store
 GITHUB_REPO := https://github.com/investigativedata/investigraph-eu
 CATALOG := catalog.yml
-DATASET_NAMES := ec_meetings eu_transparency_register eu_fts eu_authorities
+DATASET_NAMES := ec_meetings eu_transparency_register eu_fts eu_authorities eu_meps eu_cor_members eu_fsf
 DATASETS := $(DATASET_NAMES:%=$(SRC_DIR)/datasets/%.md)
 
 all: clean $(BUILD_DIR)
@@ -19,6 +19,9 @@ $(DATA_DIR):
 $(DATA_DIR)/catalog.json: $(DATA_DIR)
 	investigraph build-catalog $(CATALOG) > $(DATA_DIR)/catalog.json
 
+$(DATA_DIR)/eu_meps.json: REMOTE_DATA = https://data.opensanctions.org/datasets/latest
+$(DATA_DIR)/eu_fsf.json: REMOTE_DATA = https://data.opensanctions.org/datasets/latest
+$(DATA_DIR)/eu_cor_members.json: REMOTE_DATA = https://data.opensanctions.org/datasets/latest
 $(DATA_DIR)/%.json: $(DATA_DIR)
 	curl -s $(REMOTE_DATA)/$*/index.json > $(DATA_DIR)/$*.json
 
@@ -35,6 +38,9 @@ $(SRC_DIR)/datasets/ec_meetings.md: collection_id = 437
 $(SRC_DIR)/datasets/eu_authorities.md: collection_id = 439
 $(SRC_DIR)/datasets/eu_transparency_register.md: collection_id = 438
 $(SRC_DIR)/datasets/eu_fts.md: collection_id = 63
+$(SRC_DIR)/datasets/eu_meps.md: collection_id = 8
+$(SRC_DIR)/datasets/eu_cor_members.md: collection_id = 292
+$(SRC_DIR)/datasets/eu_fsf.md: collection_id = 291
 $(SRC_DIR)/datasets/%.md: $(SRC_DIR)/datasets $(DATA_DIR)/%.json
 	jinja -D collection_id $(collection_id) -d $(DATA_DIR)/$*.json $(TMPL_DIR)/dataset.md.j2 > $(SRC_DIR)/datasets/$*.md
 
