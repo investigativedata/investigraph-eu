@@ -10,7 +10,7 @@ DATASETS := $(DATASET_NAMES:%=$(SRC_DIR)/datasets/%.md)
 
 all: clean $(BUILD_DIR)
 
-$(BUILD_DIR): $(DATASETS)
+$(BUILD_DIR): content
 	mkdocs build -c -d $(BUILD_DIR)
 
 $(DATA_DIR):
