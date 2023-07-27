@@ -43,3 +43,7 @@ extract:
 
 transform:
   handler: ./transform.py:handle
+
+load:
+  index_uri: s3://s3.investigativedata.org@data.ftm.store/eu_transparency_register/index.json
+  entities_uri: s3://s3.investigativedata.org@data.ftm.store/eu_transparency_register/entities.ftm.json

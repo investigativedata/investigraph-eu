@@ -1,0 +1,47 @@
+name: datasets
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch: {}
+  push: {}
+
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    container: ghcr.io/investigativedata/investigraph-eu:main
+    services:
+      redis:
+        image: redis:alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    strategy:
+      matrix:
+        dataset:
+          - ec_meetings
+          - eu_authorities
+          - eu_transparency_register
+    steps:
+      - name: parse and write the dataset
+        run: "investigraph run -d ${{ matrix.dataset }} -b local-file-system/datasets"
+
+  catalog:
+    needs: data
+    runs-on: ubuntu-latest
+    container: ghcr.io/investigativedata/investigraph-datasets:main
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Update the catalog
+        run: "investigraph build-catalog /data/catalog.yml -o s3://s3.investigativedata.org@data.ftm.store/investigraph.eu.json"
+      - name: Notify success
+        run: "curl ${{ secrets.NOTIFY_HOOK }}"
