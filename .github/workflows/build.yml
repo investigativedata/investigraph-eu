@@ -1,6 +1,8 @@
 name: Deploy mkdocs site to Pages
 
 on:
+  schedule:
+    - cron: "0 2 * * *"
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
