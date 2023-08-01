@@ -23,6 +23,7 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      FSSPEC_S3_ENDPOINT_URL: ${{ secrets.FSSPEC_S3_ENDPOINT_URL }}
     strategy:
       matrix:
         dataset:
