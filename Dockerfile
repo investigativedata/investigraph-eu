@@ -2,6 +2,7 @@ FROM ghcr.io/investigativedata/investigraph:develop
 
 USER root
 RUN apt install -y curl
+RUN pip install lxml
 
 USER 1000
 
