@@ -2,7 +2,7 @@ FROM ghcr.io/investigativedata/investigraph:develop
 
 USER root
 RUN apt install -y curl
-RUN pip install lxml
+RUN pip install lxml html5lib
 
 USER 1000
 
