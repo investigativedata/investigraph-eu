@@ -1,4 +1,4 @@
-investigraph>=0.3.1
+investigraph>=0.3.2
 mkdocs-material
 jinja-cli
 html5lib
