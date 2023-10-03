@@ -1,12 +1,1 @@
-/* :root { */
-/*   --md-primary-fg-color:        #BB2649; */
-/*   --md-primary-fg-color--light: #F8E9ED; */
-/*   --md-primary-fg-color--dark:  #5E1325; */
-/*   --md-accent-fg-color:         #f7d6d8; */
-/*   --md-default-bg-color:        #887a7b; */
-/*   --md-default-fg-color:        #fbebeb; */
-/*   --md-default-fg-color--light: #fbebeb; */
-/*   --md-code-bg-color:           #1f0206; */
-/*   --md-code-fg-color:           #e599a0; */
-/* } */
-
+@import url("https://cdn.investigativedata.org/style/mkdocs.min.css");
