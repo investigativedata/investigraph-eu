@@ -41,8 +41,9 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      FSSPEC_S3_ENDPOINT_URL: ${{ secrets.FSSPEC_S3_ENDPOINT_URL }}
     steps:
       - name: Update the catalog
-        run: "investigraph build-catalog /data/catalog.yml -o s3://s3.investigativedata.org@data.ftm.store/investigraph.eu.json"
+        run: "investigraph build-catalog /data/catalog.yml -o s3://data.ftm.store/investigraph.eu.json"
       - name: Notify success
         run: "curl ${{ secrets.NOTIFY_HOOK }}"
