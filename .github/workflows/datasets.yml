@@ -27,8 +27,8 @@ jobs:
     strategy:
       matrix:
         dataset:
+          # - eu_authorities
           - ec_meetings
-          - eu_authorities
           - eu_transparency_register
     steps:
       - name: parse and write the dataset
