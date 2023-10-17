@@ -5,7 +5,7 @@ TMPL_DIR := templates
 REMOTE_DATA := https://data.ftm.store
 GITHUB_REPO := https://github.com/investigativedata/investigraph-eu
 CATALOG := catalog.yml
-DATASET_NAMES := ec_meetings eu_transparency_register eu_fts eu_authorities eu_meps eu_cor_members eu_fsf
+DATASET_NAMES := ec_meetings eu_transparency_register eu_fts eu_authorities eu_meps eu_cor_members eu_fsf eu_horizon_europe eu_fp7
 DATASETS := $(DATASET_NAMES:%=$(SRC_DIR)/datasets/%.md)
 
 all: clean $(BUILD_DIR)
@@ -41,6 +41,8 @@ $(SRC_DIR)/datasets/eu_fts.md: collection_id = 63
 $(SRC_DIR)/datasets/eu_meps.md: collection_id = 8
 $(SRC_DIR)/datasets/eu_cor_members.md: collection_id = 292
 $(SRC_DIR)/datasets/eu_fsf.md: collection_id = 291
+$(SRC_DIR)/datasets/eu_horizon_europe.md: collection_id = 515
+$(SRC_DIR)/datasets/eu_fp7.md: collection_id = 514
 $(SRC_DIR)/datasets/%.md: $(SRC_DIR)/datasets $(DATA_DIR)/%.json
 	jinja -D collection_id $(collection_id) -d $(DATA_DIR)/$*.json $(TMPL_DIR)/dataset.md.j2 > $(SRC_DIR)/datasets/$*.md
 
