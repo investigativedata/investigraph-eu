@@ -1,3 +1,4 @@
+followthemoney @ git+https://github.com/investigativedata/followthemoney.git@schema/science-identifiers
 investigraph>=0.3.2
 mkdocs-material
 jinja-cli
