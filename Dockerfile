@@ -8,11 +8,7 @@ RUN pip install "followthemoney @ git+https://github.com/investigativedata/follo
 
 USER 1000
 
-COPY ./catalog.yml /data/catalog.yml
-COPY ./datasets/eu_transparency_register /data/datasets/eu_transparency_register
-COPY ./datasets/eu_authorities /data/datasets/eu_authorities
-COPY ./datasets/ec_meetings /data/datasets/ec_meetings
-
-RUN investigraph add-block -b local-file-system/datasets -u /data/datasets
-
-ENV DATASETS_BLOCK local-file-system/datasets
+COPY ./catalog.yml /datasets/catalog.yml
+COPY ./datasets/eu_transparency_register /datasets/eu_transparency_register
+COPY ./datasets/eu_authorities /datasets/eu_authorities
+COPY ./datasets/ec_meetings /datasets/ec_meetings

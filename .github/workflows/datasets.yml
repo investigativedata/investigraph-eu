@@ -49,7 +49,7 @@ jobs:
           - eu_transparency_register
     steps:
       - name: parse and write the dataset
-        run: "investigraph run -d ${{ matrix.dataset }} -b local-file-system/datasets"
+        run: "investigraph run -c /datasets/${{ matrix.dataset }}/config.yml"
 
   catalog:
     needs: data
@@ -61,6 +61,6 @@ jobs:
       FSSPEC_S3_ENDPOINT_URL: ${{ secrets.FSSPEC_S3_ENDPOINT_URL }}
     steps:
       - name: Update the catalog
-        run: "investigraph build-catalog /data/catalog.yml -o s3://data.ftm.store/investigraph.eu.json"
+        run: "investigraph build-catalog /datasets/catalog.yml -o s3://data.ftm.store/investigraph.eu.json"
       - name: Notify success
         run: "curl ${{ secrets.NOTIFY_HOOK }}"
