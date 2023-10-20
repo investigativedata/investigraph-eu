@@ -1,8 +1,11 @@
 name: Deploy mkdocs site to Pages
 
 on:
-  schedule:
-    - cron: "0 2 * * *"
+  # trigger when the datasets workflow succeeded
+  workflow_run:
+    workflows: ["datasets"]
+    types:
+      - completed
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
