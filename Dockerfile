@@ -1,8 +1,8 @@
-FROM ghcr.io/investigativedata/investigraph:develop
+FROM ghcr.io/investigativedata/investigraph:main
 
 USER root
 RUN apt install -y curl
-RUN pip install lxml html5lib
+RUN pip install lxml html5lib psycopg2-binary
 RUN pip uninstall -y followthemoney
 RUN pip install "followthemoney @ git+https://github.com/investigativedata/followthemoney.git@schema/science-identifiers"
 
@@ -16,5 +16,3 @@ COPY ./datasets/ec_meetings /data/datasets/ec_meetings
 RUN investigraph add-block -b local-file-system/datasets -u /data/datasets
 
 ENV DATASETS_BLOCK local-file-system/datasets
-ENV REDIS_URL=redis://redis:6379/0
-ENV DEBUG=0

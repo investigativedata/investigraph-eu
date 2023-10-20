@@ -11,6 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/investigativedata/investigraph-eu:main
     services:
+      postgres:
+        image: postgres:alpine
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: investigraph
+          POSTGRES_DB: investigraph
+          POSTGRES_PASSWORD: investigraph
       redis:
         image: redis:alpine
         options: >-
@@ -24,6 +37,10 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       FSSPEC_S3_ENDPOINT_URL: ${{ secrets.FSSPEC_S3_ENDPOINT_URL }}
+      DEBUG: false
+      REDIS_URL: redis://redis:6379/0
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://investigraph:investigraph@postgres/investigraph
+      PREFECT_TASK_RUNNER: dask
     strategy:
       matrix:
         dataset:
