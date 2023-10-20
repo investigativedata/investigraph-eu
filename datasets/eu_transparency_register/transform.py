@@ -1,9 +1,9 @@
 from typing import Any
 
 from followthemoney.util import join_text, make_entity_id
+from ftmq.util import fingerprint as fp
 from investigraph import Context
 from investigraph.types import CE, CEGenerator, Record
-from investigraph.util import fingerprint as fp
 
 
 def make_address(ctx: Context, prefix: str, data: dict[str, Any]) -> CE | None:

@@ -1,9 +1,10 @@
 from typing import Generator
 
+from ftmq.util import fingerprint as fp
+from ftmq.util import make_entity_id
 from investigraph.model import Context
 from investigraph.types import CE, CEGenerator, Record
-from investigraph.util import fingerprint as fp
-from investigraph.util import join_text, make_entity_id
+from investigraph.util import join_text
 
 
 def make_address(ctx: Context, data: Record) -> CE | None:
