@@ -22,6 +22,11 @@ publisher:
     Commission’s work – both in shaping new policies, and in steering them
     through the other EU institutions. It supports the whole Commission.
   url: https://commission.europa.eu/about-european-commission/departments-and-executive-agencies/secretariat-general_en
+maintainer:
+  name: investigativedata.io
+  url: https://investigativedata.io
+  logo_url: https://cdn.investigativedata.org/style/logo_square_light.svg
+git_repo: https://github.com/investigativedata/investigraph-eu
 
 extract:
   sources:
