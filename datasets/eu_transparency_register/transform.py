@@ -1,21 +1,30 @@
 from typing import Any
 
 from followthemoney.util import join_text, make_entity_id
-from ftmq.util import fingerprint as fp
+from ftmq.util import make_fingerprint as fp
 from investigraph import Context
 from investigraph.types import CE, CEGenerator, Record
 
 
 def make_address(ctx: Context, prefix: str, data: dict[str, Any]) -> CE | None:
-    proxy = ctx.make("Address")
     street = data.get("{prefix} office address")
     postalCode = data.get("{prefix} office post code")
     postBox = data.get("{prefix} office post box")
     city = data.get("{prefix} office city")
     country = data.get("{prefix} office country")
     full = join_text(street, postalCode, postBox, city, country, sep=", ")
-    proxy.id = ctx.make_slug(make_entity_id(fp(full)), prefix="addr")
-    if proxy.id is not None:
+    proxy_id = ctx.make_slug(make_entity_id(fp(full)), prefix="addr")
+    if proxy_id is not None:
+        proxy = ctx.make(
+            "Address",
+            proxy_id,
+            full=full,
+            street=street,
+            postalCode=postalCode,
+            city=city,
+            country=country,
+            postOfficeBox=postBox,
+        )
         ctx.emit(proxy)
         return proxy
 
@@ -24,9 +33,9 @@ def parse_record(ctx: Context, record: dict[str, Any]):
     schema = "Organization"
     if "company" in record["Form of the entity"]:
         schema = "Company"
-    proxy = ctx.make(schema)
     ident = record["Identification code"]
-    proxy.id = ctx.make_slug(ident)
+    proxy_id = ctx.make_slug(ident)
+    proxy = ctx.make(schema, proxy_id)
     proxy.add("idNumber", ident)
     proxy.add("name", record["Name"])
     proxy.add("alias", record["Acronym"])
@@ -78,34 +87,38 @@ def parse_record(ctx: Context, record: dict[str, Any]):
 
 def parse_agents(ctx: Context, record: dict[str, Any]):
     regId = record.pop("orgIdentificationCode")
-    client = ctx.make("Organization")
-    client.id = ctx.make_slug(regId)
+    client_id = ctx.make_slug(regId)
+    client = ctx.make("Organization", client_id)
     client.add("name", record.pop("orgName"))
     client.add("idNumber", regId)
     ctx.emit(client)
 
-    agent = ctx.make("Person")
     title, firstName, lastName = (
         record.pop("title", None),
         record.pop("firstName"),
         record.pop("lastName"),
     )
-    agent.add("title", title)
-    agent.add("firstName", firstName)
-    agent.add("lastName", lastName)
-    agent.add("name", join_text(title, firstName, lastName))
-    agent.id = ctx.make_slug("agent", regId, make_entity_id(fp(agent.caption)))
+    agent_name = join_text(title, firstName, lastName)
+    agent_id = ctx.make_slug("agent", regId, make_entity_id(fp(agent_name)))
+    agent = ctx.make(
+        "Person",
+        agent_id,
+        title=title,
+        firstName=firstName,
+        lastName=lastName,
+        name=agent_name,
+    )
     ctx.emit(agent)
 
-    rel = ctx.make("Representation")
+    rel_id = ctx.make_slug(
+        "representation", make_entity_id(client.id, agent.id)
+    )  # noqa
+    rel = ctx.make("Representation", rel_id)
     rel.add("agent", agent)
     rel.add("client", client)
     rel.add("role", "Accredited lobbyist to access the european parliament")
     rel.add("startDate", record.pop("accreditationStartDate"))
     rel.add("endDate", record.pop("accreditationEndDate"))
-    rel.id = ctx.make_slug(
-        "representation", make_entity_id(client.id, agent.id)
-    )  # noqa
     ctx.emit(rel)
 
 
