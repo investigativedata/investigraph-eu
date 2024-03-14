@@ -1,0 +1,40 @@
+name: eu-stateaid
+title: State Aid Transparency Public Search
+publisher:
+  name: European Commission
+  url: https://webgate.ec.europa.eu/competition/transparency/public
+extract:
+  sources:
+    - uri: ./20240208-eu-stateaid.csv
+      pandas:
+        read:
+          options:
+            sep: ","
+            encoding: latin
+            dtype: str
+            skiprows: 1
+transform:
+  queries:
+    - entities:
+        org:
+          schema: Payment
+          key_literal: eu-stateaids
+          keys:
+            - "Ref-no."
+          properties:
+            transactionNumber:
+              column: "Ref-no."
+            summary:
+              columns:
+              - "Aid Measure Title"
+              - "Aid Measure Title [EN]"
+            beneficiary:
+              columns:
+              - "Name of the beneficiary"
+              - "Name of the beneficiary [EN]"
+              - "Nationl ID"
+              - "Sector (NACE)"
+            currency:
+              column: "Currency"
+            amount:
+              column: "Nominal Amount, expressed as full amount"
