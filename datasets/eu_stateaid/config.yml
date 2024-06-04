@@ -5,36 +5,86 @@ publisher:
   url: https://webgate.ec.europa.eu/competition/transparency/public
 extract:
   sources:
-    - uri: ./20240208-eu-stateaid.csv
+    - uri: ./20240208-eu-stateaid.csv.gz
+      stream: false
       pandas:
         read:
           options:
-            sep: ","
-            encoding: latin
+            compression: gzip
             dtype: str
-            skiprows: 1
+        operations:
+          - handler: DataFrame.rename
+            options:
+              columns:
+                "20240208-eu-stateaid.csv": Country
 transform:
   queries:
     - entities:
-        org:
+        payer:
+          schema: PublicBody
+          key_literal: eu-stateaid-authority
+          keys:
+            - Country
+            - Granting Authority Name
+            - Granting Authority Name [EN]
+          properties:
+            country:
+              column: Country
+            name:
+              columns:
+                - Granting Authority Name
+                - Granting Authority Name [EN]
+        beneficiary:
+          schema: LegalEntity
+          key_literal: eu-stateaid-beneficiary
+          keys:
+            - "National ID"
+          properties:
+            name:
+              columns:
+                - "Name of the beneficiary"
+                - "Name of the beneficiary [EN]"
+            sector:
+              column: "Sector (NACE)"
+            country:
+              column: "Another Beneficiary Member State"
+        payment:
           schema: Payment
-          key_literal: eu-stateaids
+          key_literal: eu-stateaid-payment
           keys:
             - "Ref-no."
           properties:
             transactionNumber:
               column: "Ref-no."
+            programme:
+              columns:
+                - "Aid Instrument"
+                - "Aid Instrument [EN]"
+            purpose:
+              columns:
+                - "Objectives of the Aid"
+                - "Objectives of the Aid [EN]"
             summary:
               columns:
-              - "Aid Measure Title"
-              - "Aid Measure Title [EN]"
+                - "Aid Measure Title"
+                - "Aid Measure Title [EN]"
+            date:
+              column: "Date of granting"
+              format: "%d/%m/%Y"
             beneficiary:
-              columns:
-              - "Name of the beneficiary"
-              - "Name of the beneficiary [EN]"
-              - "Nationl ID"
-              - "Sector (NACE)"
+              entity: beneficiary
+            payer:
+              entity: payer
             currency:
               column: "Currency"
             amount:
-              column: "Nominal Amount, expressed as full amount"
+              columns:
+                - "Nominal Amount, expressed as full amount"
+                - "Aid element, expressed as full amount"
+
+load:
+  fragments_uri: postgresql:///ftm
+
+aggregate: false
+# aggregate: 
+#   handler: investigraph.logic.aggregate:in_db
